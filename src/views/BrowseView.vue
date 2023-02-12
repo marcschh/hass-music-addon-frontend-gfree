@@ -48,11 +48,6 @@ import { useRouter } from "vue-router";
 import { getBrowseFolderName } from "../utils";
 import api from "../plugins/api";
 
-export interface Props {
-  path?: string;
-}
-const props = defineProps<Props>();
-
 const { t } = useI18n();
 const router = useRouter();
 const { mobile } = useDisplay();
@@ -73,12 +68,14 @@ const loadData = async function () {
   loading.value = false;
 };
 
+const page = ref('');
+
 onMounted(() => {
   loadData();
 });
 
 watch(
-  () => props.path,
+  () => page.value,
   () => {
     loadData();
   }

@@ -1,4 +1,29 @@
 import type { Artist, BrowseFolder, ItemMapping } from '@/plugins/api/interfaces';
+import MobileDetect from 'mobile-detect';
+import { store } from './plugins/store';
+
+const md = new MobileDetect(window.navigator.userAgent);
+
+export const isMobile = () => {
+  return md.mobile()
+    ? true
+    : false ||
+        store.getDisplaySize.width < getResponsiveBreakpoints.breakpoint_1;
+};
+
+export const isPhone = () => {
+  return md.phone()
+    ? true
+    : false ||
+        store.getDisplaySize.width < getResponsiveBreakpoints.breakpoint_1;
+};
+
+export const isTablet = () => {
+  return md.tablet()
+    ? true
+    : false ||
+        store.getDisplaySize.width < getResponsiveBreakpoints.breakpoint_1;
+};
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const parseBool = (val: string | boolean) => {
@@ -79,9 +104,11 @@ export const kebabize = (str: string) => {
     .join('');
 };
 
-export const getArtistsString = function (artists: Array<Artist | ItemMapping>) {
+export const getArtistsString = function (artists: Artist[], limit?: number) {
   if (!artists) return '';
+  if (!limit) limit = 100;
   return artists
+    .slice(0, limit)
     .map((x) => {
       return x.name;
     })
@@ -100,4 +127,18 @@ export const getBrowseFolderName = function (browseItem: BrowseFolder, t: any) {
     browseTitle = browseItem.path || '';
   }
   return browseTitle;
+};
+
+//Is in the process of calibration. A sorting of the values is therefore pending.
+export const getResponsiveBreakpoints = {
+  breakpoint_1: 575,
+  breakpoint_2: 715,
+  breakpoint_3: 960,
+  breakpoint_4: 1100,
+  breakpoint_5: 1500,
+  breakpoint_6: 1700,
+  breakpoint_7: 800,
+  breakpoint_8: 375,
+  breakpoint_9: 1900,
+  breakpoint_10: 540,
 };

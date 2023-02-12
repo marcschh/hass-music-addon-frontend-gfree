@@ -8,6 +8,12 @@ interface Store {
   selectedPlayer?: Player;
   isInStandaloneMode: boolean;
   showPlayersMenu: boolean;
+  showFullscreenPlayer: boolean;
+  showContextMenu: boolean;
+  showBackgroundJobs: boolean;
+  showSettings: boolean;
+  showTabsNav: boolean;
+  getDisplaySize: { height: number; width: number };
   darkTheme: boolean;
   topBarTitle?: string;
   topBarContextMenuItems: ContextMenuItem[];
@@ -29,6 +35,12 @@ export const store: Store = reactive({
   selectedPlayer: undefined,
   isInStandaloneMode: false,
   showPlayersMenu: false,
+  showFullscreenPlayer: false,
+  showContextMenu: false,
+  showBackgroundJobs: false,
+  showSettings: true,
+  showTabsNav: true,
+  getDisplaySize: { height: 0, width: 0 },
   darkTheme: false,
   topBarContextMenuItems: [],
   blockGlobalPlayMenu: false,

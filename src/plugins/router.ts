@@ -129,6 +129,18 @@ const routes = [
       },
     ],
   },
+  {
+    name: 'settings',
+    path: '/settings',
+    component: SettingsView,
+    props: true,
+  },
+  {
+    name: 'search',
+    path: '/search',
+    component: SearchView,
+    props: true,
+  },
 ];
 
 const router = createRouter({

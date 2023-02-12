@@ -17,13 +17,21 @@
 import type { ProviderMapping } from '../plugins/api/interfaces';
 
 import { computed } from 'vue';
+import IconBase from './Icons/IconBase.vue';
 
+// properties
 export interface Props {
   providerMappings: ProviderMapping[];
   height: number;
   enableLink?: boolean;
 }
-const props = defineProps<Props>();
+
+const props = withDefaults(defineProps<Props>(), {
+  size: '1.4em',
+  height: '1.4em',
+  width: '1.4em',
+  enableLink: false,
+});
 
 const uniqueProviders = computed(() => {
   const output: ProviderMapping[] = [];
@@ -75,13 +83,13 @@ export const getProviderIcon = function (providerDomain: string) {
   return iconFilesystem;
 };
 export const getContentTypeIcon = function (contentType: ContentType) {
-  if (contentType == ContentType.AAC) return iconAac;
-  if (contentType == ContentType.FLAC) return iconFlac;
-  if (contentType == ContentType.MP3) return iconMp3;
-  if (contentType == ContentType.MPEG) return iconMp3;
-  if (contentType == ContentType.OGG) return iconOgg;
-  if (contentType == ContentType.M4A) return iconM4a;
-  return iconFallback;
+  if (contentType == ContentType.AAC) return 'aac';
+  if (contentType == ContentType.FLAC) return 'flac';
+  if (contentType == ContentType.MP3) return 'mp3';
+  if (contentType == ContentType.MPEG) return 'mp3';
+  if (contentType == ContentType.OGG) return 'ogg';
+  if (contentType == ContentType.M4A) return 'm4a';
+  return 'fallback';
 };
 
 export const getQualityDesc = function (provDetails: ProviderMapping) {
@@ -99,15 +107,14 @@ export const getQualityDesc = function (provDetails: ProviderMapping) {
 
 <style scoped>
 .provider-icons {
-  width: auto;
   vertical-align: middle;
   align-items: center;
   padding: 0px;
 }
 
+
 .provider-icon {
   float: inherit;
-  padding-left: 5px;
   display: flex;
   margin: 5px;
 }

@@ -100,6 +100,7 @@
             <div v-for="key of sortKeys" :key="key">
               <v-list-item @click="changeSort(key)">
                 <v-list-item-title>{{ $t('sort.' + key) }}</v-list-item-title>
+                <v-list-item-title>{{ $t('sort.' + key) }}</v-list-item-title>
                 <template #append>
                   <v-icon v-if="sortBy == key" icon="mdi-check" />
                 </template>
@@ -173,8 +174,10 @@
       <v-row v-if="viewMode == 'panel'">
         <v-col
           v-for="item in items"
+          v-for="item in items"
           :key="item.uri"
-          :class="`col-${panelViewItemResponsive($vuetify.display.width)}`"
+          class="col"
+          :data-responsive="panelViewItemResponsive($vuetify.display.width)"
         >
           <PanelviewItem
             :item="item"
@@ -192,7 +195,7 @@
         <RecycleScroller
           v-slot="{ item }"
           :items="items"
-          :item-size="60"
+          :min-item-size="60"
           key-field="item_id"
           page-mode
         >
@@ -232,14 +235,18 @@
             {{ $t('try_global_search') }}
           </v-btn>
         </v-alert>
-        <v-alert v-else-if="!loading && items.length == 0" type="info">
+        <v-alert
+          v-else-if="!loading && items.length == 0"
+          color="accent"
+          type="info"
+        >
           {{ $t('no_content') }}
         </v-alert>
       </div>
       <v-snackbar :model-value="selectedItems.length > 1">
         <span>{{ $t('items_selected', [selectedItems.length]) }}</span>
         <template #actions>
-          <v-btn color="primary" variant="text" @click="showContextMenu = true">
+          <v-btn color="accent" variant="text" @click="showContextMenu = true">
             {{ $t('actions') }}
           </v-btn>
         </template>
@@ -277,6 +284,7 @@ import { useRouter } from 'vue-router';
 import { api } from '../plugins/api';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
+import { getResponsiveBreakpoints } from '@/utils';
 
 // properties
 export interface Props {
@@ -334,19 +342,37 @@ const albumArtistsOnlyFilter = ref(false);
 const panelViewItemResponsive = function (displaySize: number) {
   if (displaySize < 500) {
     return 2;
-  } else if (displaySize <= 500) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_1 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_2
+  ) {
     return 3;
-  } else if (displaySize <= 700) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_2 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_3
+  ) {
     return 4;
-  } else if (displaySize <= 1000) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_3 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_4
+  ) {
     return 5;
-  } else if (displaySize <= 1200) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_4 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_5
+  ) {
     return 6;
-  } else if (displaySize <= 1500) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_5 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_6
+  ) {
     return 7;
-  } else if (displaySize <= 1700) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_6 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_9
+  ) {
     return 8;
-  } else if (displaySize > 1700) {
+  } else if (displaySize >= getResponsiveBreakpoints.breakpoint_9) {
     return 9;
   } else {
     return 0;
@@ -423,7 +449,7 @@ const toggleCheckboxes = function () {
   }
 };
 
-const onDelete = function (item: MediaItemType) {
+const onDelete = function () {
   loadData(true);
 };
 
@@ -455,7 +481,7 @@ const onClick = function (mediaItem: MediaItemType) {
   }
 };
 
-const changeSort = function (sort_key?: string, sort_desc?: boolean) {
+const changeSort = function (sort_key?: string) {
   if (sort_key !== undefined) {
     sortBy.value = sort_key;
   }
@@ -728,42 +754,42 @@ export const filteredItems = function (
 .scroller {
   height: 100%;
 }
-.col-2 {
+.col[data-responsive='2'] {
   width: 50%;
   max-width: 50%;
   flex-basis: 50%;
 }
-.col-3 {
+.col[data-responsive='3'] {
   width: 33.3%;
   max-width: 33.3%;
   flex-basis: 33.3%;
 }
-.col-4 {
+.col[data-responsive='4'] {
   width: 25%;
   max-width: 25%;
   flex-basis: 25%;
 }
-.col-5 {
+.col[data-responsive='5'] {
   width: 20%;
   max-width: 20%;
   flex-basis: 20%;
 }
-.col-6 {
+.col[data-responsive='6'] {
   width: 16.6%;
   max-width: 16.6%;
   flex-basis: 16.6%;
 }
-.col-7 {
+.col[data-responsive='7'] {
   width: 14.2%;
   max-width: 14.2%;
   flex-basis: 14.2%;
 }
-.col-8 {
+.col[data-responsive='8'] {
   width: 12.5%;
   max-width: 12.5%;
   flex-basis: 12.5%;
 }
-.col-9 {
+.col[data-responsive='9'] {
   width: 11.1%;
   max-width: 11.1%;
   flex-basis: 11.1%;

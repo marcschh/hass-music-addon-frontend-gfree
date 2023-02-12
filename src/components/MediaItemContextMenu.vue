@@ -1,22 +1,37 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
-  <v-overlay
+  <v-dialog
     :model-value="modelValue"
-    class="align-center justify-center"
+    fullscreen
     :scrim="false"
+    transition="dialog-bottom-transition"
   >
-    <v-menu class="fullscreen-menu" :model-value="modelValue">
-      <v-card>
-        <v-toolbar density="default" dark color="primary">
-          <v-icon :icon="mdiPlayCircleOutline" />
-          <v-toolbar-title v-if="showPlaylistsMenu" style="padding-left: 10px">
-            <b>{{ $t('add_playlist') }}</b>
-            <span v-if="!$vuetify.display.mobile"> | {{ header }} </span>
-          </v-toolbar-title>
-          <v-toolbar-title v-else style="padding-left: 10px">
-            <b>{{ header }}</b>
-          </v-toolbar-title>
-          <v-btn :icon="mdiClose" dark text @click="close()" />
-        </v-toolbar>
+    <v-card style="border: none">
+      <v-toolbar dark color="primary">
+        <template #prepend>
+          <v-app-bar-nav-icon :icon="mdiPlayCircleOutline"></v-app-bar-nav-icon>
+        </template>
+        <v-toolbar-title v-if="showPlaylistsMenu" :class="'line-clamp-1'">
+          {{ $t('add_playlist') }}
+          <span v-if="!$vuetify.display.mobile"> | {{ header }} </span>
+        </v-toolbar-title>
+        <v-toolbar-title v-else :class="'line-clamp-1'">
+          {{ header }}
+        </v-toolbar-title>
+        <template #append>
+          <div style="align-items: right; display: flex">
+            <v-btn icon @click="close()">
+              <v-icon :icon="mdiClose" />
+            </v-btn>
+          </div>
+        </template>
+      </v-toolbar>
+      <div
+        style="
+          transition: transform 1s cubic-bezier(0.18, 0, 0, 1), opacity 1s ease,
+            filter 0.5s ease;
+        "
+      >
         <!-- play contextmenu items -->
         <v-card-text
           v-if="
@@ -29,8 +44,8 @@
             :items="availablePlayers"
             hide-details
             @update:model-value="
-              (newVal) => {
-                store.selectedPlayer = api.players[newVal];
+              (playerId: string) => {
+                store.selectedPlayer = api.players[playerId];
               }
             "
           />
@@ -59,7 +74,6 @@
             !showPlaylistsMenu &&
             actionMenuItems.length > 0
           "
-          style="padding-top: 0; margin-top: -10px; padding-bottom: 0"
         >
           <v-list-item-subtitle style="margin-left: 10px">
             {{ $t('actions') }}
@@ -131,11 +145,12 @@
                 <v-list-item ripple>
                   <template #prepend>
                     <div class="listitem-thumb">
-                      <img
+                      <IconBase
                         v-bind="props"
-                        :height="40"
-                        :src="getProviderIcon(prov.type)"
                         style="margin-left: 5px; margin-top: 5px"
+                        :height="'40px'"
+                        :width="'50px'"
+                        :name="getProviderIcon(prov.type)"
                       />
                     </div>
                   </template>
@@ -146,7 +161,7 @@
                       variant="plain"
                       hide-details
                       @update:model-value="
-                        (txt) => {
+                        (txt: string) => {
                           newPlaylistName = txt;
                         }
                       "
@@ -160,9 +175,9 @@
             </div>
           </v-list>
         </v-card-text>
-      </v-card>
-    </v-menu>
-  </v-overlay>
+      </div>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
@@ -197,6 +212,7 @@ import { ProviderFeature } from '../plugins/api/interfaces';
 import api from '../plugins/api';
 import { useI18n } from 'vue-i18n';
 import { store } from '../plugins/store';
+import IconBase from './Icons/IconBase.vue';
 
 // properties
 export interface Props {
@@ -635,12 +651,3 @@ export const getContextMenuItems = function (
   return contextMenuItems;
 };
 </script>
-
-<style>
-.fullscreen-menu .v-overlay__content {
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-}
-</style>

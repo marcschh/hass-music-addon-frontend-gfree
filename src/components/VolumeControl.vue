@@ -119,10 +119,29 @@ import type { Player } from "../plugins/api/interfaces";
 import { api } from "../plugins/api";
 import { truncateString } from "../utils";
 
+// properties
 export interface Props {
+  // eslint-disable-next-line vue/require-default-prop
   player: Player;
+  smallBtnIcon: {
+    button: number;
+    icon: number;
+  };
 }
-defineProps<Props>();
+
+const props = withDefaults(defineProps<Props>(), {
+  smallBtnIcon: () => ({ button: 40, icon: 24 }),
+});
+
+const decrement = function (playerId: string, playerCurrentVolume: number) {
+  playerCurrentVolume--
+  api.queueCommandVolume(playerId, playerCurrentVolume)
+};
+
+const increment = function (playerId: string, playerCurrentVolume: number) {
+  playerCurrentVolume++
+  api.queueCommandVolume(playerId, playerCurrentVolume)
+};
 
 const getVolumePlayers = function (player: Player) {
   const items: Player[] = [];
@@ -140,3 +159,15 @@ const getVolumePlayers = function (player: Player) {
   return items;
 };
 </script>
+
+<style>
+
+.player-volume-control > div.v-input__prepend {
+  margin-inline-end: 0px !important;
+}
+
+.player-volume-control > div.v-input__append {
+  margin-inline-start: 0px !important;
+}
+
+</style>

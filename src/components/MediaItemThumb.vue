@@ -15,10 +15,18 @@
     >
       <v-img
         :key="item?.uri"
+        ondragstart="return false;"
         :min-height="minSize"
         :min-width="minSize"
         :cover="cover"
-        :src="imgData"
+        :src="img || imgData"
+        :lazy-src="
+          !lazySrc
+            ? $vuetify.theme.current.dark
+              ? darkCoverImg
+              : lightCoverImg
+            : lazySrc
+        "
       >
         <template #placeholder>
           <div class="d-flex align-center justify-center fill-height">
@@ -43,12 +51,14 @@ import { store } from '../plugins/store';
 
 export interface Props {
   item?: MediaItemType | ItemMapping | QueueItem;
-  size?: number;
-  minSize?: number;
-  maxSize?: number;
+  size?: number | string;
+  minSize?: number | string;
+  maxSize?: number | string;
   tile?: boolean;
   cover?: boolean;
+  img?: string;
   fallback?: string;
+  lazySrc?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -80,21 +90,56 @@ watchEffect(async () => {
 </script>
 
 <script lang="ts">
-//// utility functions for images
+// utility functions for images
+function getMeta(url: string) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = function (meta) {
+      resolve({ width: meta.path[0].width, height: meta.path[0].height });
+    };
+    img.onerror = () => reject();
+  });
+}
 
-export const getMediaItemImage = function (
+export const lightCoverImg = new URL(
+  '../assets/cover_light.png',
+  import.meta.url
+).href;
+
+export const darkCoverImg = new URL('../assets/cover_dark.png', import.meta.url)
+  .href;
+
+export const getMediaItemImage = async function (
   mediaItem?: MediaItemType | ItemMapping | QueueItem,
   type: ImageType = ImageType.THUMB,
   includeFileBased = false
-): MediaItemImage | undefined {
+): Promise<MediaItemImage | undefined> {
   // get imageurl for mediaItem
   if (!mediaItem) return undefined;
   if ('image' in mediaItem && mediaItem.image) return mediaItem.image; // queueItem
   if ('metadata' in mediaItem && mediaItem.metadata.images) {
-    for (const img of mediaItem.metadata.images) {
-      if (img.is_file && !includeFileBased) continue;
-      if (img.type == type) return img;
+    let img: MediaItemImage | undefined;
+    let refImgSize = 0;
+    const agent = window.navigator.userAgent;
+
+    for (const imgEntity of mediaItem.metadata.images) {
+      if (imgEntity.is_file && !includeFileBased) continue;
+      if (
+        imgEntity.type == type &&
+        (imgEntity.is_file || agent.includes('Home Assistant'))
+      )
+        return imgEntity;
+      const imgMeta: any = await getMeta(imgEntity.url);
+      if ((!imgMeta || !imgMeta.height) && imgEntity.type == type) {
+        return imgEntity;
+      }
+      if (imgMeta.height > refImgSize && imgEntity.type == type) {
+        refImgSize = imgMeta.height;
+        img = imgEntity;
+      }
     }
+    return img;
   }
   // retry with album of track
   if (
@@ -140,7 +185,7 @@ export const getImageThumbForItem = async function (
   size?: number
 ): Promise<string | undefined> {
   if (!mediaItem) return;
-  const img = getMediaItemImage(mediaItem, type, true);
+  const img = await getMediaItemImage(mediaItem, type, true);
   if (!img) return undefined;
   if (!img.is_file && size) {
     // get url to resized image(thumb) from weserv service

@@ -2,10 +2,9 @@
 <template>
   <div>
     <v-list-item
-      ripple
-      style="height: 60px"
+      link
       :disabled="!itemIsAvailable(item)"
-      lines="two"
+      class="listitem"
       density="compact"
       @click.stop="emit('click', item)"
       @click.right.prevent="emit('menu', item)"
@@ -164,7 +163,10 @@
           <!-- in library (heart) icon -->
           <div
             v-if="
-              'in_library' in item && showLibrary && !$vuetify.display.mobile
+              'in_library' in item &&
+              showLibrary &&
+              $vuetify.display.width >= getResponsiveBreakpoints.breakpoint_1 &&
+              showMenu
             "
             class="listitem-action"
           >
@@ -207,6 +209,7 @@
           <div
             v-if="
               showDuration &&
+              !showTimeline &&
               item.media_type == MediaType.TRACK &&
               'duration' in item &&
               item.duration != undefined &&
@@ -214,11 +217,22 @@
             "
             class="listitem-action"
           >
-            <span>{{ formatDuration(item.duration) }}</span>
+            <div>
+              <span
+                class="text-caption"
+                style="padding-right: 10px; padding-left: 10px"
+                >{{ formatDuration(item.duration) }}</span
+              >
+            </div>
           </div>
         </div>
 
-        <v-menu v-if="showDetails" location="bottom end" @click:outside.stop>
+        <v-menu
+          v-if="showDetails"
+          :close-on-content-click="false"
+          location="top end"
+          @click:outside.stop
+        >
           <template #activator="{ props }">
             <v-icon
               icon="mdi-information-outline"
@@ -263,12 +277,14 @@
               </div>
 
               <!-- link to web location of item (provider share link -->
-              <div
+              <v-list-item
                 v-if="
                   item.provider_mappings[0].url &&
                   !item.provider.includes('file')
                 "
-                style="height: 50px; display: flex; align-items: center"
+                :min-height="40"
+                :max-height="40"
+                class="list-item"
               >
                 <v-icon
                   size="40"
@@ -326,7 +342,6 @@
             </v-list>
           </v-card>
         </v-menu>
-
         <!-- menu button/icon -->
         <v-btn
           v-if="showMenu"
@@ -337,7 +352,6 @@
         />
       </template>
     </v-list-item>
-    <v-divider />
   </div>
 </template>
 
@@ -380,6 +394,8 @@ export interface Props {
   isSelected: boolean;
   showCheckboxes?: boolean;
   showDetails?: boolean;
+  showTimeline?: boolean;
+  showDate?: boolean;
   parentItem?: MediaItemType;
 }
 
@@ -444,3 +460,23 @@ const fetchPreviewUrl = async function (provider: string, item_id: string) {
   previewUrls[key] = url;
 };
 </script>
+
+<style>
+.v-slider.v-input--horizontal .v-input__control {
+  min-height: 5px;
+}
+
+.listitem {
+  padding-right: 0px;
+  border-radius: 4px;
+}
+
+.listitem-thumb {
+  padding-left: 0px;
+  margin-right: 10px;
+  margin-left: -10px;
+  margin-top: 2px;
+  width: 50px;
+  height: 50px;
+}
+</style>

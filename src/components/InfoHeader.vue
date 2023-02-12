@@ -1,12 +1,13 @@
 <template>
   <div>
     <v-card
-      flat
-      :img="imgGradient"
-      style="margin-top: -10px; z-index: 0"
-      height="30vh"
-      max-height="500px"
-      min-height="340px"
+      v-if="item"
+      class="header-card"
+      :style="`background-image: linear-gradient(${
+        $vuetify.theme.current.dark
+          ? 'to bottom, rgba(0,0,0,.80), rgba(0,0,0,.75)'
+          : 'to bottom, rgba(255,255,255,.85), rgba(255,255,255,.65)'
+      } 100%), ${fanartImage ? `url(${fanartImage})` : ''};`"
     >
       <!-- loading animation -->
       <v-progress-linear v-if="!item" indeterminate />
@@ -312,6 +313,18 @@ watchEffect(async () => {
   }
 });
 
+gsap.timeline({
+  scrollTrigger: {
+    trigger: '.header-card',
+    start: 'top -5',
+    end: 99999,
+    toggleClass: {
+      className: 'header-card--scrolled',
+      targets: '.header-card',
+    },
+  },
+});
+
 onBeforeUnmount(() => {
   store.topBarContextMenuItems = [];
 });
@@ -363,11 +376,30 @@ const description = computed(() => {
 </script>
 
 <style>
-.background-image {
-  position: absolute;
+.description-text {
+  cursor: text;
+  overflow: auto;
+  max-height: 14vh;
+  white-space: pre-line;
+  max-width: 750px;
 }
-
-.background-image .v-img__img--cover {
-  object-position: 50% 20%;
+.description-text::-webkit-scrollbar {
+  display: none;
+}
+.header-card {
+  padding: 15px 24px 15px 24px;
+  padding-right: 15px;
+  background-size: cover;
+  background-position: 50% 20%;
+  border: 0px !important;
+  height: 340px;
+  max-height: 500px;
+  overflow: auto;
+  display: flex;
+  border-radius: 0px;
+  transition: ease 1s;
+}
+.header-card--scrolled {
+  height: 240px;
 }
 </style>

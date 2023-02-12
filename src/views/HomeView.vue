@@ -4,45 +4,17 @@
       style="
         margin-left: 10px;
         margin-right: 10px;
-        margin-top: 20px;
-        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
       "
     >
-      <GlobalSearch />
-      <!-- search artists -->
-      <!-- <v-card
-        v-if="searchArtists.length > 0"
-        style="margin-top: 20px; margin-bottom: 20px"
-      >
-        <v-card-title style="margin-left: 15px">{{
-          $t("artists")
-        }}</v-card-title>
-        <v-slide-group
-          show-arrows="always"
-          style="margin-left: 5px; margin-right: 5px; margin-bottom: 10px"
-        >
-          <v-slide-group-item v-for="item in searchArtists" :key="item.uri">
-            <PanelviewItem
-              :item="item"
-              :size="thumbSize"
-              :is-selected="false"
-              :show-checkboxes="false"
-              style="margin: 5px"
-            />
-          </v-slide-group-item>
-        </v-slide-group>
-      </v-card> -->
-
-      <!-- regular menu items -->
-      <div style="margin-top: 20px">
-        <v-row dense align-content="start" align="start">
+      <div>
+        <v-row dense align-content="start" :align="'start'">
           <v-col v-for="card in cards" :key="card.label" align-self="start">
             <v-card
-              class="mx-auto"
-              align="center"
+              :ripple="true"
+              class="mx-auto home-card"
               outlined
-              min-width="150"
-              max-width="344"
               @click="$router.push(card.path)"
             >
               <v-list-item two-line>
@@ -73,8 +45,6 @@ import {
   mdiPlaylistMusic,
   mdiRadio,
   mdiFolder,
-  mdiFileSync,
-  mdiCached,
 } from '@mdi/js';
 import { ref, onBeforeUnmount } from 'vue';
 import { store } from '../plugins/store';
@@ -131,6 +101,11 @@ const cards = ref([
     path: '/playlists',
   },
   {
+    label: 'radios',
+    icon: mdiRadio,
+    path: '/radios',
+  },
+  {
     label: 'browse',
     icon: 'mdi-folder',
     path: '/browse',
@@ -139,6 +114,19 @@ const cards = ref([
 </script>
 
 <style>
+.home-card {
+  min-width: 150px;
+  text-align: center;
+  padding-top: 12px;
+  padding-bottom: 8px;
+}
+
+.home-card-title {
+  line-height: 1.5 !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+}
+
 div.v-slide-group__next {
   position: absolute;
   right: -5px;
