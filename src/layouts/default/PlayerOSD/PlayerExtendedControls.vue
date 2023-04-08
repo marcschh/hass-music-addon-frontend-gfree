@@ -98,7 +98,7 @@
           </v-btn>
         </div>
       </template>
-
+      
       <v-card min-width="350">
         <v-list
           style="overflow: hidden"
@@ -153,9 +153,8 @@
 import { computed, ref } from "vue";
 
 import api from "@/plugins/api";
-import { PlayerState } from "@/plugins/api/interfaces";
 import { store } from "@/plugins/store";
-import { getPlayerName, getResponsiveBreakpoints } from "@/utils";
+import { getResponsiveBreakpoints } from "@/utils";
 import PlayerVolume from "./PlayerVolume.vue";
 import VolumeControl from "@/components/VolumeControl.vue";
 

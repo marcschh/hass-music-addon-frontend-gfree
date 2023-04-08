@@ -38,8 +38,8 @@
                     style="align: center; padding: 10px"
                   />
                 </v-btn>
-                <div class="mb-4">
-                  {{ $t(card.label) }}
+                <div class="mt-4">
+                  <h4>{{ $t(card.label) }}</h4>
                 </div>
               </v-list-item>
             </v-card>

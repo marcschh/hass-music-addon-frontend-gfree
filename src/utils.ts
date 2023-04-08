@@ -89,9 +89,14 @@ export const kebabize = (str: string) => {
 };
 
 export const getArtistsString = function (
-  artists: Array<Artist | ItemMapping>
+  artists: Array<Artist | ItemMapping>,
+  size?: number
 ) {
   if (!artists) return "";
+  if (size)
+    return artists.slice(0, size).map(x => {
+      return x.name;
+    }).join(" / ");
   return artists
     .map((x) => {
       return x.name;
@@ -132,6 +137,7 @@ export const numberRange = function (start: number, end: number): number[] {
 
 //Is in the process of calibration. A sorting of the values is therefore pending.
 export const getResponsiveBreakpoints = {
+  breakpoint_0: 500,
   breakpoint_1: 575,
   breakpoint_2: 715,
   breakpoint_3: 960,
@@ -152,17 +158,17 @@ export const isMobileDevice = (device: MobileDeviceType, displaySize: {
 }) => {
   if (device == MobileDeviceType.ALL) {
     return md.mobile()
-    ? true
-    : displaySize.width < getResponsiveBreakpoints.breakpoint_1;
+      ? true
+      : displaySize.width < getResponsiveBreakpoints.breakpoint_1;
   }
   if (device == MobileDeviceType.PHONE) {
     return md.phone()
-    ? true
-    : displaySize.width < getResponsiveBreakpoints.breakpoint_1;
+      ? true
+      : displaySize.width < getResponsiveBreakpoints.breakpoint_1;
   }
   if (device == MobileDeviceType.TABLET) {
     return md.tablet()
-    ? true
-    : displaySize.width < getResponsiveBreakpoints.breakpoint_1;
+      ? true
+      : displaySize.width < getResponsiveBreakpoints.breakpoint_1;
   }
 };

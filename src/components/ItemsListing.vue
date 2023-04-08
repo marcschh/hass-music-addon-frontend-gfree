@@ -223,6 +223,7 @@
             :item="item"
             :is-selected="isSelected(item)"
             :show-checkboxes="showCheckboxes"
+            :show-track-number="showTrackNumber"
             @select="onSelect"
             @menu="onMenu"
             @click="onClick"
@@ -335,6 +336,7 @@ import { useRouter } from "vue-router";
 import { api } from "../plugins/api";
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
+import { getResponsiveBreakpoints } from "@/utils";
 
 // properties
 export interface Props {
@@ -409,25 +411,44 @@ const toggleSearch = function () {
     });
   }
 };
+
 const panelViewItemResponsive = function (displaySize: number) {
-  if (displaySize < 500) {
+  if (displaySize < getResponsiveBreakpoints.breakpoint_0) {
     return 2;
-  } else if (displaySize <= 500) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_0 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_2
+  ) {
     return 3;
-  } else if (displaySize <= 700) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_2 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_3
+  ) {
     return 4;
-  } else if (displaySize <= 1000) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_3 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_4
+  ) {
     return 5;
-  } else if (displaySize <= 1200) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_4 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_5
+  ) {
     return 6;
-  } else if (displaySize <= 1500) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_5 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_6
+  ) {
     return 7;
-  } else if (displaySize <= 1700) {
+  } else if (
+    displaySize >= getResponsiveBreakpoints.breakpoint_6 &&
+    displaySize < getResponsiveBreakpoints.breakpoint_9
+  ) {
     return 8;
-  } else if (displaySize > 1700) {
+  } else if (displaySize >= getResponsiveBreakpoints.breakpoint_9) {
     return 9;
   } else {
-    return 8;
+    return 0;
   }
 };
 

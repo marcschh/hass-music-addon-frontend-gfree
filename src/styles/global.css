@@ -22,6 +22,14 @@
   -webkit-font-smoothing: antialiased;
 }
 
+* {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
   /* active tab */
   .v-btn.v-slide-group-item--active.v-tab--selected {
     background: rgb(var(--v-theme-primary));
@@ -32,6 +40,7 @@
   .v-tabs--grow .v-tab {
     background: rgba(var(--v-theme-primary), 0.3);
     color: rgb(var(--v-theme-text-color));
+    border-radius: 0px;
   }
 
   a {
@@ -108,8 +117,6 @@
   .line-clamp-2 {
     white-space: pre-line;
     overflow: hidden;
-    line-height: 1.5em;
-    height: 3em;
     word-wrap: break-word;
     box-sizing: border-box;
     display: -webkit-box;
@@ -203,16 +210,59 @@
   width: 50px;
 }
 
+  /* text */
 .v-list-item-subtitle {
-font-weight: 400;
-font-size: 0.6875rem;
-line-height: 17.6px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
 }
 
 .v-list-item-title {
-font-weight: 400;
-font-size: 0.875rem;
-line-height: 22.4px;
+  font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+  }
+
+.v-toolbar-title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 38px;
+  }
+
+h1 {
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 38px;
+}
+
+h2 {
+  font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+}
+
+h3 {
+  font-weight: 500;
+font-size: 20px;
+line-height: 23px;
+}
+
+h4 { 
+  font-weight: 500;
+font-size: 16px;
+line-height: 30px;
+}
+
+h5 {
+  font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+}
+
+h6 {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
 }
 
 .v-input--horizontal .v-input__prepend {
