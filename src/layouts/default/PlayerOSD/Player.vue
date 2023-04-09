@@ -3,36 +3,26 @@
     bottom
     fixed
     class="d-flex flex-column"
-    style="width: 100%; border-top-style: ridge; padding: 0px;"
+    style="width: 100%; border-top-style: ridge; padding: 0px"
     elevation="5"
     app
   >
     <div
       v-if="colorCode"
-      :class="`mediacontrols-bg-${$vuetify.display.width >= getResponsiveBreakpoints.breakpoint_1
-        ? '1'
-        : '2'
-      }`"
-      :style="`background: linear-gradient(90deg, rgba(${colorCode[0]}, ${colorCode[1]}, ${colorCode[2]}, ${$vuetify.theme.current.dark ? '0.3' : '0.7'}) 0%, rgba(${colorCode[0]}, ${colorCode[1]}, ${colorCode[2]}, 0) 100%);`"
+      :class="`mediacontrols-bg-${$vuetify.display.width >= getResponsiveBreakpoints.breakpoint_1 ? '1' : '2'}`"
+      :style="`background: linear-gradient(90deg, rgba(${colorCode[0]}, ${colorCode[1]}, ${colorCode[2]}, ${
+        $vuetify.theme.current.dark ? '0.3' : '0.7'
+      }) 0%, rgba(${colorCode[0]}, ${colorCode[1]}, ${colorCode[2]}, 0) 100%);`"
     />
-    <PlayerTimeline
-      :is-progress-bar="true"
-      :is-hidden="!isMobileDevice(MobileDeviceType.ALL, $vuetify.display)"
-    />
+    <PlayerTimeline :is-progress-bar="true" :is-hidden="!isMobileDevice(MobileDeviceType.ALL, $vuetify.display)" />
 
     <div class="mediacontrols">
-      <div
-        :class="`mediacontrols-left-${$vuetify.display.width >= getResponsiveBreakpoints.breakpoint_1
-          ? '1'
-          : '2'
-        }`"
-      >
+      <div :class="`mediacontrols-left-${$vuetify.display.width >= getResponsiveBreakpoints.breakpoint_1 ? '1' : '2'}`">
         <PlayerTrackDetails :show-only-artist="true" />
       </div>
       <div
-        :class="`mediacontrols-buttom-center-${$vuetify.display.width >= getResponsiveBreakpoints.breakpoint_1
-          ? '1'
-          : '2'
+        :class="`mediacontrols-buttom-center-${
+          $vuetify.display.width >= getResponsiveBreakpoints.breakpoint_1 ? '1' : '2'
         }`"
       >
         <div style="width: 100%">
@@ -61,8 +51,7 @@
             :button-visibility="{
               repeat: false,
               shuffle: false,
-              play:
-                $vuetify.display.width < getResponsiveBreakpoints.breakpoint_1,
+              play: $vuetify.display.width < getResponsiveBreakpoints.breakpoint_1,
               previous: false,
               next: false,
             }"
@@ -82,21 +71,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch } from 'vue';
 //@ts-ignore
-import ColorThief from 'colorthief'
+import ColorThief from 'colorthief';
 
-import api from "@/plugins/api";
-import { ImageType, MobileDeviceType } from "@/plugins/api/interfaces";
-import { store } from "@/plugins/store";
-import {
-  getImageThumbForItem,
-} from "@/components/MediaItemThumb.vue";
-import { getResponsiveBreakpoints, isMobileDevice } from "@/utils";
-import PlayerTimeline from "./PlayerTimeline.vue";
-import PlayerControls from "./PlayerControls.vue";
-import PlayerTrackDetails from "./PlayerTrackDetails.vue";
-import PlayerExtendedControls from "./PlayerExtendedControls.vue";
+import api from '@/plugins/api';
+import { ImageType, MobileDeviceType } from '@/plugins/api/interfaces';
+import { store } from '@/plugins/store';
+import { getImageThumbForItem } from '@/components/MediaItemThumb.vue';
+import { getResponsiveBreakpoints, isMobileDevice } from '@/utils';
+import PlayerTimeline from './PlayerTimeline.vue';
+import PlayerControls from './PlayerControls.vue';
+import PlayerTrackDetails from './PlayerTrackDetails.vue';
+import PlayerExtendedControls from './PlayerExtendedControls.vue';
 
 // local refs
 const fanartImage = ref();
@@ -107,7 +94,7 @@ const img = new Image();
 img.crossOrigin = 'Anonymous';
 
 img.addEventListener('load', function () {
-  colorCode.value = colorThief.getColor(img)
+  colorCode.value = colorThief.getColor(img);
 });
 
 // computed properties
@@ -128,23 +115,15 @@ watch(
   async () => {
     if (curQueueItem.value?.media_item) {
       fanartImage.value =
-        (await getImageThumbForItem(
-          curQueueItem.value.media_item,
-          ImageType.FANART
-        )) ||
-        (await getImageThumbForItem(
-          curQueueItem.value.media_item,
-          ImageType.THUMB
-        ));
-      img.src = fanartImage.value
+        (await getImageThumbForItem(curQueueItem.value.media_item, ImageType.FANART)) ||
+        (await getImageThumbForItem(curQueueItem.value.media_item, ImageType.THUMB));
+      img.src = fanartImage.value;
     }
-  }
+  },
 );
-
 </script>
 
 <style scoped>
-
 .mediadetails-streamdetails .icon {
   opacity: 100;
 }
@@ -204,7 +183,7 @@ watch(
   vertical-align: middle;
 }
 
-.mediacontrols-buttom-right>div {
+.mediacontrols-buttom-right > div {
   display: inline-flex;
   align-items: center;
 }

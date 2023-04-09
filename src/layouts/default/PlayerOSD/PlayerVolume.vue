@@ -13,45 +13,36 @@
     @mouseenter="isThumbHidden = false"
     @mouseleave="isThumbHidden = true"
   >
-    <template
-      v-if="$slots.content"
-      #content
-    >
+    <template v-if="$slots.content" #content>
       <slot></slot>
     </template>
-    <template
-      v-if="$slots.prepend"
-      #prepend
-    >
+    <template v-if="$slots.prepend" #prepend>
       <slot name="prepend"></slot>
     </template>
-    <template
-      v-if="$slots.append"
-      #append
-    >
+    <template v-if="$slots.append" #append>
       <slot name="append"></slot>
     </template>
   </v-slider>
 </template>
-  
-  <script setup lang="ts">
-  import { ref } from 'vue';
-  
-  // properties
-  export interface Props {
-    width?: string;
-    height?: string;
-    isPowered?: boolean;
-    style?: string;
-  }
-  
-  const props = withDefaults(defineProps<Props>(), {
-    width: '100%',
-    height: 'auto',
-    isPowered: false,
-    style: '',
-  });
-  
-  // local refs
-  const isThumbHidden = ref(true);
-  </script>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+// properties
+export interface Props {
+  width?: string;
+  height?: string;
+  isPowered?: boolean;
+  style?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  width: '100%',
+  height: 'auto',
+  isPowered: false,
+  style: '',
+});
+
+// local refs
+const isThumbHidden = ref(true);
+</script>

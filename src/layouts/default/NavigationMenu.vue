@@ -5,14 +5,14 @@
     :rail="!$vuetify.display.mobile && !store.showNavigationMenu"
     :model-value="($vuetify.display.mobile && store.showNavigationMenu) || !$vuetify.display.mobile"
     :width="220"
-    @update:model-value="(e) => { if ($vuetify.display.mobile)store.showNavigationMenu = e}"
+    @update:model-value="
+      (e) => {
+        if ($vuetify.display.mobile) store.showNavigationMenu = e;
+      }
+    "
   >
-    <div style="height:20px" />
-    <v-list
-      lines="one"
-      density="compact"
-      nav
-    >
+    <div style="height: 20px" />
+    <v-list lines="one" density="compact" nav>
       <v-list-item
         v-for="menuItem of menuItems"
         :key="menuItem.path"
@@ -28,15 +28,15 @@
 </template>
 
 <script setup lang="ts">
-import { store } from "@/plugins/store";
+import { store } from '@/plugins/store';
 
 const menuItems = [
-{
+  {
     label: 'home',
     icon: 'mdi-home',
     path: '/home',
   },
-{
+  {
     label: 'search',
     icon: 'mdi-magnify',
     path: '/search',
@@ -76,10 +76,7 @@ const menuItems = [
     icon: 'mdi-cog',
     path: '/settings',
   },
-]
-
+];
 </script>
 
-<style>
-
-</style>
+<style></style>

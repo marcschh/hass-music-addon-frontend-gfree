@@ -1,13 +1,7 @@
 <template>
   <!-- now playing media -->
   <v-list-item
-    style="
-              height: 60px;
-              width: fit-content;
-              margin-top: -5px;
-              padding-bottom: 30px;
-              padding-top: 5px;
-            "
+    style="height: 60px; width: fit-content; margin-top: -5px; padding-bottom: 30px; padding-top: 5px"
     lines="two"
   >
     <template #prepend>
@@ -20,12 +14,7 @@
           style="cursor: pointer"
           @click="store.showFullscreenPlayer = true"
         />
-        <v-img
-          v-else
-          height="50"
-          :src="iconFallback"
-          style="opacity: 50%;"
-        />
+        <v-img v-else height="50" :src="iconFallback" style="opacity: 50%" />
       </div>
     </template>
 
@@ -34,17 +23,12 @@
       <span
         v-if="curQueueItem && curQueueItem.media_item"
         style="cursor: pointer"
-        @click="
-          curQueueItem?.media_item ? itemClick(curQueueItem.media_item) : ''
-        "
+        @click="curQueueItem?.media_item ? itemClick(curQueueItem.media_item) : ''"
       >
         {{ curQueueItem.media_item.name }}
-        <span
-          v-if="
-            'version' in curQueueItem.media_item &&
-              curQueueItem.media_item.version
-          "
-        >({{ curQueueItem.media_item.version }})</span>
+        <span v-if="'version' in curQueueItem.media_item && curQueueItem.media_item.version"
+          >({{ curQueueItem.media_item.version }})</span
+        >
       </span>
       <span v-else-if="curQueueItem">
         {{ curQueueItem.name }}
@@ -60,17 +44,13 @@
     </template>
 
     <!-- append -->
-    <template
-      #append
-    >
+    <template #append>
       <!-- format -->
       <v-img
         v-if="$vuetify.display.width >= getResponsiveBreakpoints.breakpoint_3"
-        style="margin-left: 15px;"
+        style="margin-left: 10px"
         :src="iconSmallFlac"
-        :style="
-          $vuetify.theme.current.dark ? '' : 'filter: invert(100%)'
-        "
+        :style="$vuetify.theme.current.dark ? '' : 'filter: invert(100%)'"
         width="30"
       />
     </template>
@@ -79,16 +59,15 @@
       <!-- track: artists(s) + album -->
       <div
         v-if="
-          curQueueItem && curQueueItem.media_item?.media_type == MediaType.TRACK &&
-            'album' in curQueueItem.media_item &&
-            curQueueItem.media_item.album &&
-            !props.showOnlyArtist
+          curQueueItem &&
+          curQueueItem.media_item?.media_type == MediaType.TRACK &&
+          'album' in curQueueItem.media_item &&
+          curQueueItem.media_item.album &&
+          !props.showOnlyArtist
         "
         style="cursor: pointer"
         class="line-clamp-1"
-        @click="
-          curQueueItem?.media_item ? itemClick(curQueueItem.media_item) : ''
-        "
+        @click="curQueueItem?.media_item ? itemClick(curQueueItem.media_item) : ''"
       >
         {{ getArtistsString(curQueueItem.media_item.artists) }} •
         {{ curQueueItem.media_item.album.name }}
@@ -96,66 +75,49 @@
       <!-- track/album falback: artist present -->
       <div
         v-else-if="
-          curQueueItem && curQueueItem.media_item &&
-            'artists' in curQueueItem.media_item &&
-            curQueueItem.media_item.artists.length > 0
+          curQueueItem &&
+          curQueueItem.media_item &&
+          'artists' in curQueueItem.media_item &&
+          curQueueItem.media_item.artists.length > 0
         "
         class="line-clamp-1"
         style="cursor: pointer"
-        @click="
-          curQueueItem?.media_item
-            ? itemClick(curQueueItem.media_item.artists[0])
-            : ''
-        "
+        @click="curQueueItem?.media_item ? itemClick(curQueueItem.media_item.artists[0]) : ''"
       >
         {{ curQueueItem.media_item.artists[0].name }}
       </div>
       <!-- radio live metadata -->
-      <div
-        v-else-if="curQueueItem?.streamdetails?.stream_title"
-        class="line-clamp-1"
-      >
+      <div v-else-if="curQueueItem?.streamdetails?.stream_title" class="line-clamp-1">
         {{ curQueueItem?.streamdetails?.stream_title }}
       </div>
       <!-- other description -->
-      <div
-        v-else-if="curQueueItem && curQueueItem.media_item?.metadata.description"
-        class="line-clamp-1"
-      >
+      <div v-else-if="curQueueItem && curQueueItem.media_item?.metadata.description" class="line-clamp-1">
         {{ curQueueItem.media_item.metadata.description }}
       </div>
       <!-- queue empty message -->
-      <div
-        v-else-if="activePlayerQueue"
-        class="line-clamp-1"
-      >
+      <div v-else-if="activePlayerQueue" class="line-clamp-1">
         {{ $t('queue_empty') }}
       </div>
       <!-- 3rd party source active -->
-      <div
-        v-else-if="store.selectedPlayer?.active_source != store.selectedPlayer?.player_id"
-        class="line-clamp-1"
-      >
+      <div v-else-if="store.selectedPlayer?.active_source != store.selectedPlayer?.player_id" class="line-clamp-1">
         {{ $t('external_source_active', [store.selectedPlayer?.active_source]) }}
       </div>
     </template>
   </v-list-item>
 </template>
-  
-<script setup lang="ts">
-import { ref, computed, watch } from "vue";
 
-import api from "@/plugins/api";
-import { MediaType, ImageType, MediaItemType } from "@/plugins/api/interfaces";
-import { store } from "@/plugins/store";
-import MediaItemThumb, {
-  getImageThumbForItem,
-} from "@/components/MediaItemThumb.vue";
-import { getArtistsString } from "@/utils";
-import { useRouter } from "vue-router";
-import PlayerFullscreen from "./PlayerFullscreen.vue";
-import { iconFallback, iconSmallFlac } from "@/components/ProviderIcons.vue";
-import { getResponsiveBreakpoints } from "@/utils";
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue';
+
+import api from '@/plugins/api';
+import { MediaType, ImageType, MediaItemType } from '@/plugins/api/interfaces';
+import { store } from '@/plugins/store';
+import MediaItemThumb, { getImageThumbForItem } from '@/components/MediaItemThumb.vue';
+import { getArtistsString } from '@/utils';
+import { useRouter } from 'vue-router';
+import PlayerFullscreen from './PlayerFullscreen.vue';
+import { iconFallback, iconSmallFlac } from '@/components/ProviderIcons.vue';
+import { getResponsiveBreakpoints } from '@/utils';
 
 const router = useRouter();
 
@@ -197,16 +159,9 @@ watch(
   async () => {
     if (curQueueItem.value?.media_item) {
       fanartImage.value =
-        (await getImageThumbForItem(
-          curQueueItem.value.media_item,
-          ImageType.FANART
-        )) ||
-        (await getImageThumbForItem(
-          curQueueItem.value.media_item,
-          ImageType.THUMB
-        ));
+        (await getImageThumbForItem(curQueueItem.value.media_item, ImageType.FANART)) ||
+        (await getImageThumbForItem(curQueueItem.value.media_item, ImageType.THUMB));
     }
-  }
+  },
 );
-
 </script>
